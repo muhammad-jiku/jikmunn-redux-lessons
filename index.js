@@ -3,14 +3,18 @@ const { createStore } = require('redux');
 
 //  defining constants
 const INCREMENT = 'INCREMENT';
+const INCREMENT_BY_VALUE = 'INCREMENT_BY_VALUE';
 const DECREMENT = 'DECREMENT';
+const RESET = 'RESET';
+const ADD_USER = 'ADD_USER';
 
 //  state
 const intialCounterState = {
-  count: 0,
+  count: 1,
+  users: ['Muhammad'],
 };
 
-//  actions [object => (type => must be include, payload => payload uses for transfering data) ]
+//  actions [object => (type => must be include, payload => payload uses for transfering or receiving data) ]
 //  Increment Counter
 const incrementCounter = () => {
   return {
@@ -22,6 +26,29 @@ const incrementCounter = () => {
 const decrementCounter = () => {
   return {
     type: DECREMENT,
+  };
+};
+
+//  Reset Counter
+const resetCounter = () => {
+  return {
+    type: RESET,
+  };
+};
+
+// increment by value counter
+const incerementByValueCounter = (value) => {
+  return {
+    type: INCREMENT_BY_VALUE,
+    payload: value,
+  };
+};
+
+// increment by value counter
+const addUserCounter = (user) => {
+  return {
+    type: ADD_USER,
+    payload: user,
   };
 };
 
@@ -38,6 +65,24 @@ const reducerCounter = (state = intialCounterState, action) => {
       return {
         ...state,
         count: state.count - 1,
+      };
+
+    case RESET:
+      return {
+        ...state,
+        count: 1,
+      };
+
+    case INCREMENT_BY_VALUE:
+      return {
+        ...state,
+        count: state.count + action.payload,
+      };
+
+    case ADD_USER:
+      return {
+        count: state.count + 1,
+        users: [...state.users, action.payload],
       };
 
     default:
@@ -58,7 +103,15 @@ store.dispatch(incrementCounter());
 store.dispatch(incrementCounter());
 store.dispatch(incrementCounter());
 store.dispatch(incrementCounter());
+store.dispatch(resetCounter());
+store.dispatch(incrementCounter());
+store.dispatch(incrementCounter());
 store.dispatch(decrementCounter());
+store.dispatch(incerementByValueCounter(25));
+store.dispatch(resetCounter());
+store.dispatch(addUserCounter('Azizul'));
+store.dispatch(addUserCounter('Hoque'));
+store.dispatch(addUserCounter('Jiku'));
 
 //  redux in a nutshell
 //  1. states
