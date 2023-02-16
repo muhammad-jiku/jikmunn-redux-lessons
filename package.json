@@ -15,5 +15,8 @@
   "homepage": "https://github.com/muhammad-jiku/jikmunn-redux-lessons#readme",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "redux": "^4.2.1"
   }
 }
