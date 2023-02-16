@@ -41,6 +41,7 @@ const addUser = () => {
   };
 };
 
+//  redux in a nutshell
 //  1. states
 //  2. dispatch actions
 //  3. reducers
