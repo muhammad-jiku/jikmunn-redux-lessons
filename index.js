@@ -1,97 +1,103 @@
 //  external import
-const { createStore } = require('redux');
+const { createStore, combineReducers } = require('redux');
 
-//  defining constants
-const INCREMENT = 'INCREMENT';
-const INCREMENT_BY_VALUE = 'INCREMENT_BY_VALUE';
-const DECREMENT = 'DECREMENT';
-const RESET = 'RESET';
-const ADD_USER = 'ADD_USER';
+//  defining products constants
+const ADD_PRODUCT = 'ADD_PRODUCT';
+const GET_PRODUCTS = 'GET_PRODUCTS';
 
-//  state
-const intialCounterState = {
-  count: 1,
-  users: ['Muhammad'],
+//  defining carts constants
+const ADD_CART = 'ADD_CART';
+const GET_CARTS = 'GET_CARTS';
+
+//  products state
+const intialProductState = {
+  products: ['Milk', 'Sugar', 'Coffee'],
+  numOfProducts: 3,
+};
+
+//  carts state
+const intialCartState = {
+  carts: ['Milk', 'Sugar', 'Coffee'],
+  numOfCarts: 3,
 };
 
 //  actions [object => (type => must be include, payload => payload uses for transfering or receiving data) ]
-//  Increment Counter
-const incrementCounter = () => {
+//  get products
+const getProducts = () => {
   return {
-    type: INCREMENT,
+    type: GET_PRODUCTS,
   };
 };
 
-//  Decrement Counter
-const decrementCounter = () => {
+// add product
+const addProduct = (product) => {
   return {
-    type: DECREMENT,
+    type: ADD_PRODUCT,
+    payload: product,
   };
 };
 
-//  Reset Counter
-const resetCounter = () => {
+//  get carts
+const getCarts = () => {
   return {
-    type: RESET,
+    type: GET_CARTS,
   };
 };
 
-// increment by value counter
-const incerementByValueCounter = (value) => {
+// add product
+const addCart = (cart) => {
   return {
-    type: INCREMENT_BY_VALUE,
-    payload: value,
+    type: ADD_CART,
+    payload: cart,
   };
 };
 
-// increment by value counter
-const addUserCounter = (user) => {
-  return {
-    type: ADD_USER,
-    payload: user,
-  };
-};
-
-//  reducer for counter
-const reducerCounter = (state = intialCounterState, action) => {
+//  product reducer
+const productReducer = (state = intialProductState, action) => {
   switch (action.type) {
-    case INCREMENT:
+    case GET_PRODUCTS:
       return {
         ...state,
-        count: state.count + 1,
       };
 
-    case DECREMENT:
+    case ADD_PRODUCT:
       return {
-        ...state,
-        count: state.count - 1,
-      };
-
-    case RESET:
-      return {
-        ...state,
-        count: 1,
-      };
-
-    case INCREMENT_BY_VALUE:
-      return {
-        ...state,
-        count: state.count + action.payload,
-      };
-
-    case ADD_USER:
-      return {
-        count: state.count + 1,
-        users: [...state.users, action.payload],
+        products: [...state.products, action.payload],
+        numOfProducts: state.numOfProducts + 1,
       };
 
     default:
-      state;
+      return state;
   }
 };
 
+//  cart reducer
+const cartReducer = (state = intialCartState, action) => {
+  switch (action.type) {
+    case GET_CARTS:
+      return {
+        ...state,
+      };
+
+    case ADD_CART:
+      return {
+        carts: [...state.carts, action.payload],
+        numOfCarts: state.numOfCarts + 1,
+      };
+
+    default:
+      return state;
+  }
+};
+
+//  combining multiple reducers
+const rootReducer = combineReducers({
+  productR: productReducer,
+  cartR: cartReducer,
+});
+
 //  create store
-const store = createStore(reducerCounter);
+const store = createStore(rootReducer);
 
 //  subscribing store
 store.subscribe(() => {
@@ -99,19 +105,14 @@ store.subscribe(() => {
 });
 
 //  dispatching actions
-store.dispatch(incrementCounter());
-store.dispatch(incrementCounter());
-store.dispatch(incrementCounter());
-store.dispatch(incrementCounter());
-store.dispatch(resetCounter());
-store.dispatch(incrementCounter());
-store.dispatch(incrementCounter());
-store.dispatch(decrementCounter());
-store.dispatch(incerementByValueCounter(25));
-store.dispatch(resetCounter());
-store.dispatch(addUserCounter('Azizul'));
-store.dispatch(addUserCounter('Hoque'));
-store.dispatch(addUserCounter('Jiku'));
+store.dispatch(getProducts());
+store.dispatch(addProduct('pen'));
+store.dispatch(addProduct('pencil'));
+store.dispatch(addProduct('geometry box'));
+store.dispatch(getCarts());
+store.dispatch(addCart('table'));
+store.dispatch(addCart('notebook'));
+store.dispatch(addCart('book'));
 
 //  redux in a nutshell
 //  1. states
